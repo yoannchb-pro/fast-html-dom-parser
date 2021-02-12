@@ -1,0 +1,28 @@
+{
+  "name": "fast-html-dom-parser",
+  "version": "1.0.0",
+  "description": "Fast parser of a html string and lot of options.",
+  "main": "fast-html-dom-parser.mod.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "homepage": "https://github.com/yoannchb-pro/fast-html-dom-parser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yoannchb-pro/fast-html-dom-parser"
+  },
+  "keywords": [
+    "fast",
+    "dom",
+    "parser",
+    "html",
+    "string",
+    "easy",
+    "all",
+    "js",
+    "node",
+    "yoannchb"
+  ],
+  "author": "yoannchb",
+  "license": "MIT"
+}
