@@ -145,7 +145,7 @@ class DOMparser{
                 all.push(res);
     
                 //DIVERS
-                if(tag != "img" && tag != "input" && tag != "!DOCTYPE" && !element.includes("/>")) parents.push(res);
+                if(tag != "img" && tag != "input" && tag != "!DOCTYPE" && !element.includes("/>") && tag != "meta" && tag != "link") parents.push(res);
             } else {
                 parents.pop();
             }
