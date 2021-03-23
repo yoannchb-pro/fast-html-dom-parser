@@ -64,7 +64,7 @@ class HTMLElementParser{
     getElementsByClassName(className){
         let res = [];
         this.childrens.forEach((e) => {
-            const f = e.attributes.filter(a => a.name == "class" && a.value.includes(className));
+            const f = e.attributes.filter(a => a.name == "class" && a.value.split(' ').indexOf(className) != -1);
             if(f.length > 0) res.push(e);
             if(e.childrens.length > 0) res = res.concat(e.getElementsByClassName(className));
         })
@@ -175,7 +175,7 @@ class DOMparser{
    getElementsByClassName(className){
         let res = [];
         this.tree.forEach((e) => {
-            const f = e.attributes.filter(a => a.name == "class" && a.value.includes(className));
+            const f = e.attributes.filter(a => a.name == "class" && a.value.split(' ').indexOf(className) != -1);
             if(f.length > 0) res.push(e);
             if(e.childrens.length > 0) res = res.concat(e.getElementsByClassName(className));
         })

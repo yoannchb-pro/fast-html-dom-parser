@@ -1,6 +1,9 @@
-# 📖 Fast-html-dom-parser v1.0.0
+# 📖 Fast-html-dom-parser v1.0.2
 
 Fast parser of a html string and lot of options.
+
+## Update
+- Correction for getElementsByClassName
 
 ## 🐱 Github and NPM
 ---

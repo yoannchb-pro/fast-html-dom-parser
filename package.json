@@ -1,6 +1,6 @@
 {
   "name": "fast-html-dom-parser",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Fast parser of a html string and lot of options.",
   "main": "fast-html-dom-parser.mod.js",
   "scripts": {
