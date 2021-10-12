@@ -1,9 +1,9 @@
-# 📖 Fast-html-dom-parser v1.0.2
+# 📖 Fast-html-dom-parser v1.0.3
 
 Fast parser of a html string and lot of options.
 
 ## Update
-- Correction for getElementsByClassName
+- All bugs fixed
 
 ## 🐱 Github and NPM
 ---
@@ -20,8 +20,8 @@ Browser
 ```
 Node
 ```js
-const api = require('./fast-html-dom-parser.mod.js');
-const api = require('fast-html-dom-parser');
+const { DOMparser } = require('./fast-html-dom-parser.js');
+const { DOMparser } = require('fast-html-dom-parser');
 ```
 ## 📚 API
 ---
@@ -34,7 +34,7 @@ const api = require('fast-html-dom-parser');
 const document = new DOMparser(html);
 
 //Node
-const document = new api.DOMparser(html);
+const document = new DOMparser(html);
 
 //example
 document.getElementById('test').getElementsByTagName('div')[0].getAttribute('class');

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../../fast-html-dom-parser.js"></script>
+    <link rel="stylesheet" href="style.css"/>
+    <title>DOM parser</title>
+</head>
+<body>
+    <div class="main">
+        <textarea id="html"></textarea>
+        <button onclick="convert()">Parse</button>
+        <textarea id="result"></textarea>
+    </div>
+</body>
+<script>
+    function convert(){
+        const code = document.querySelector('#html').value;
+        const parsed = new DOMparser(code);
+        console.log(parsed.tree);
+        document.querySelector('#result').value = parsed.toJson();
+    }
+</script>
+</html>

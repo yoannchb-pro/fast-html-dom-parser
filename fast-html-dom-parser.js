@@ -1,15 +1,58 @@
+const unclosedTag = [
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+    'command',
+    'keygen',
+    'menuitem'
+];
+
+/*
+    From https://stackoverflow.com/questions/11616630/how-can-i-print-a-circular-structure-in-a-json-like-format
+*/
+JSON.safeStringify = (obj, indent = 2) => {
+    let cache = [];
+    const retVal = JSON.stringify(
+        obj,
+        (key, value) =>
+        typeof value === "object" && value !== null
+            ? cache.includes(value)
+            ? undefined 
+            : cache.push(value) && value 
+            : value,
+        indent
+    );
+    cache = null;
+    return retVal;
+};
+
+
 class HTMLElementParser{
     constructor(json){
         this.parentNode = json.parentNode;
         this.element = json.element;
         this.tag = json.tag;
         this.attributes = json.attributes;
-        this.childrens = json.childrens;
+        this.childNodes = json.childNodes;
         this.innerHTML = json.innerHTML;
 
         //Other parameters
-        this.childNodes = this.childrens;
         this.nodeName = this.tag.toUpperCase();
+    }
+
+    toJson(){
+        return JSON.safeStringify(this);
     }
 
     /*
@@ -53,39 +96,39 @@ class HTMLElementParser{
     */
     getElementById(id){
         let res = false;
-        this.childrens.forEach((e) => {
+        this.childNodes.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "id" && a.value == id);
             if(f.length > 0) res = e;
-            if(e.childrens.length > 0 && !res) res = e.getElementById(id);
+            if(e.childNodes.length > 0 && !res) res = e.getElementById(id);
         })
         return res;
     }
 
     getElementsByClassName(className){
         let res = [];
-        this.childrens.forEach((e) => {
+        this.childNodes.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "class" && a.value.split(' ').indexOf(className) != -1);
             if(f.length > 0) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByClassName(className));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByClassName(className));
         })
         return res;
    }
 
    getElementsByTagName(tagName){
         let res = [];
-        this.childrens.forEach((e) => {
+        this.childNodes.forEach((e) => {
             if(e.tag == tagName) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByTagName(tagName));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByTagName(tagName));
         })
         return res;
     }
 
     getElementsByName(name){
         let res = [];
-        this.childrens.forEach((e) => {
+        this.childNodes.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "name" && a.value == name);
             if(f.length > 0) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByName(name));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByName(name));
         })
         return res;
     }
@@ -96,6 +139,9 @@ class DOMparser{
     * CONSTRUCTOR
     */
     constructor(html){
+        //Remove useless from the code
+        html = this.removeComments(html);
+
         const tags = html.match(/<\/?[a-z]+[^>]*>/gi);
         const tree = [];
     
@@ -132,20 +178,20 @@ class DOMparser{
                     element: element,
                     tag: tag,
                     attributes: attributes,
-                    childrens: [],
+                    childNodes: [],
                     innerHTML: html
                 })
     
-                //CHILDRENS OR ADD TREE
+                //childNodes OR ADD TREE
                 if(parent !== false){
-                    parents[parents.length-1].childrens.push(res);
+                    parents[parents.length-1].childNodes.push(res);
                 } else {
                     tree.push(res);
                 }
                 all.push(res);
     
                 //DIVERS
-                if(tag != "img" && tag != "input" && tag != "!DOCTYPE" && !element.includes("/>") && tag != "meta" && tag != "link") parents.push(res);
+                if(!element.includes("/>") || unclosedTag.includes(tag)) parents.push(res);
             } else {
                 parents.pop();
             }
@@ -159,6 +205,14 @@ class DOMparser{
         this.tree = tree;
     }
 
+    removeComments(html){
+        return html.replace(/<![\s\S]+?>/gi, '');
+    }
+
+    toJson(){
+        return JSON.safeStringify(this.tree);
+    }
+
     /*
     * Methods
     */
@@ -167,7 +221,7 @@ class DOMparser{
         this.tree.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "id" && a.value == id);
             if(f.length > 0) res = e;
-            if(e.childrens.length > 0 && !res) res = e.getElementById(id);
+            if(e.childNodes.length > 0 && !res) res = e.getElementById(id);
         })
         return res;
    }
@@ -177,7 +231,7 @@ class DOMparser{
         this.tree.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "class" && a.value.split(' ').indexOf(className) != -1);
             if(f.length > 0) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByClassName(className));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByClassName(className));
         })
         return res;
    }
@@ -186,7 +240,7 @@ class DOMparser{
         let res = [];
         this.tree.forEach((e) => {
             if(e.tag == tagName) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByTagName(tagName));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByTagName(tagName));
         })
         return res;
     }
@@ -196,16 +250,16 @@ class DOMparser{
         this.tree.forEach((e) => {
             const f = e.attributes.filter(a => a.name == "name" && a.value == name);
             if(f.length > 0) res.push(e);
-            if(e.childrens.length > 0) res = res.concat(e.getElementsByName(name));
+            if(e.childNodes.length > 0) res = res.concat(e.getElementsByName(name));
         })
         return res;
     }
 }
 
-/*TEST
-let dom = new DOMparser(new XMLSerializer().serializeToString(document));
-console.log("Dom: ", dom.tree);
-console.log("Id sfcnt: ", dom.getElementById('sfcnt'));
-console.log("Class LC20lb: ", dom.getElementsByClassName('LC20lb'));
-console.log("Tag div: ", dom.getElementsByTagName('div'));
-*/
+if (typeof exports == "object") module.exports = { DOMparser, unclosedTag };
+
+// let dom = new DOMparser(new XMLSerializer().serializeToString(document));
+// console.log("Dom: ", dom.tree);
+// console.log("Id sfcnt: ", dom.getElementById('sfcnt'));
+// console.log("Class LC20lb: ", dom.getElementsByClassName('LC20lb'));
+// console.log("Tag div: ", dom.getElementsByTagName('div'));
