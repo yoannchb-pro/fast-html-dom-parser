@@ -160,9 +160,10 @@ class DOMparser{
                 const attributes = [];
                 parse.forEach((attr) => {
                     const separator = attr.split('=');
+                    const name = separator.shift();
                     attributes.push({
-                        name: separator[0],
-                        value: separator[1] ? separator[1].replace(/"|'/gi, "") : false
+                        name: name,
+                        value: separator.length > 0 ? separator.join('=').replace(/"|'/gi, "") : false
                     });
                 });
     

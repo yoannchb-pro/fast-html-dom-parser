@@ -1,9 +1,9 @@
-# 📖 Fast-html-dom-parser v1.0.3
+# 📖 Fast-html-dom-parser v1.0.4
 
 Fast parser of a html string and lot of options.
 
 ## Update
-- All bugs fixed
+- Attribute bug fixed with `=` symbol
 
 ## 🐱 Github and NPM
 ---
