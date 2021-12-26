@@ -1,9 +1,10 @@
-# 📖 Fast-html-dom-parser v1.0.4
+# 📖 Fast-html-dom-parser v1.0.5
 
 Fast parser of a html string and lot of options.
 
 ## Update
-- Attribute bug fixed with `=` symbol
+- All bugs fixed
+- new declaration FastHTMLParser
 
 ## 🐱 Github and NPM
 ---
@@ -20,8 +21,8 @@ Browser
 ```
 Node
 ```js
-const { DOMparser } = require('./fast-html-dom-parser.js');
-const { DOMparser } = require('fast-html-dom-parser');
+const { FastHTMLParser } = require('./fast-html-dom-parser.js');
+const { FastHTMLParser } = require('fast-html-dom-parser');
 ```
 ## 📚 API
 ---
@@ -31,10 +32,10 @@ const { DOMparser } = require('fast-html-dom-parser');
 //here html is a string of you html code
 
 //Browser
-const document = new DOMparser(html);
+const document = new FastHTMLParser(html);
 
 //Node
-const document = new DOMparser(html);
+const document = new FastHTMLParser(html);
 
 //example
 document.getElementById('test').getElementsByTagName('div')[0].getAttribute('class');

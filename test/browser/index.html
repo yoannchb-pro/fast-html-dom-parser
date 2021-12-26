@@ -17,7 +17,7 @@
 <script>
     function convert(){
         const code = document.querySelector('#html').value;
-        const parsed = new DOMparser(code);
+        const parsed = new FastHTMLParser(code);
         console.log(parsed.tree);
         document.querySelector('#result').value = parsed.toJson();
     }

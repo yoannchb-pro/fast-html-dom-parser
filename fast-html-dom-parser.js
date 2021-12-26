@@ -1,4 +1,4 @@
-const unclosedTag = [
+const selfClosingTag = [
     'area',
     'base',
     'br',
@@ -18,9 +18,6 @@ const unclosedTag = [
     'menuitem'
 ];
 
-/*
-    From https://stackoverflow.com/questions/11616630/how-can-i-print-a-circular-structure-in-a-json-like-format
-*/
 JSON.safeStringify = (obj, indent = 2) => {
     let cache = [];
     const retVal = JSON.stringify(
@@ -36,7 +33,6 @@ JSON.safeStringify = (obj, indent = 2) => {
     cache = null;
     return retVal;
 };
-
 
 class HTMLElementParser{
     constructor(json){
@@ -134,7 +130,7 @@ class HTMLElementParser{
     }
 }
 
-class DOMparser{
+class FastHTMLParser{
     /*
     * CONSTRUCTOR
     */
@@ -189,10 +185,11 @@ class DOMparser{
                 } else {
                     tree.push(res);
                 }
+
                 all.push(res);
     
-                //DIVERS
-                if(!element.includes("/>") || unclosedTag.includes(tag)) parents.push(res);
+                //Push to parent if not closed
+                if(!element.includes("/>") && !selfClosingTag.includes(tag)) parents.push(res);
             } else {
                 parents.pop();
             }
@@ -257,10 +254,4 @@ class DOMparser{
     }
 }
 
-if (typeof exports == "object") module.exports = { DOMparser, unclosedTag };
-
-// let dom = new DOMparser(new XMLSerializer().serializeToString(document));
-// console.log("Dom: ", dom.tree);
-// console.log("Id sfcnt: ", dom.getElementById('sfcnt'));
-// console.log("Class LC20lb: ", dom.getElementsByClassName('LC20lb'));
-// console.log("Tag div: ", dom.getElementsByTagName('div'));
+if (typeof exports == "object") module.exports = { FastHTMLParser , selfClosingTag };

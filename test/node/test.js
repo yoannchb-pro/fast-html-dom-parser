@@ -1,4 +1,4 @@
-const { DOMparser } = require('../../fast-html-dom-parser.js');
+const { FastHTMLParser } = require('../../fast-html-dom-parser.js');
 const test = `
 <html>
     <head>
@@ -16,5 +16,5 @@ const test = `
 </html>
 `;
 
-const document = new DOMparser(test);
+const document = new FastHTMLParser(test);
 console.log(document.tree);
